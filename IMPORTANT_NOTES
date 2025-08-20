@@ -1,0 +1,9 @@
+---
+
+## 📌 Important Notes
+
+- Instructions for running the tests can be found in the **README.md**.  
+- In Playwright, there is no need to implement setup/teardown code for opening and closing the browser — this is handled automatically by the framework.  
+  - However, it is possible to apply **global setup and teardown** for other purposes, such as performing login via API or creating and cleaning up test data.  
+- I do not see the need to implement **Page Objects** (a typical object-oriented programming pattern) in JavaScript, which is primarily functional.  
+  - For this project, applying Page Objects would be unnecessary complexity and closer to over-engineering.
