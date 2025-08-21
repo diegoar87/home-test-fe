@@ -1,34 +1,30 @@
 import { test, expect } from '@playwright/test';
 import { Config } from '../config';
+import { Login } from './commands/login';
 
+let username = Config.DEFAULT_USER.username;
+let password = Config.DEFAULT_USER.password;
 
 test.describe('Login spec test cases', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/login');
   });
 
-test('should successfully login' , async ({page}) => {
-    await page.locator("#username").fill(Config.DEFAULT_USER.username)
-    await page.locator("#password").fill(Config.DEFAULT_USER.password)
-    await page.getByRole("button" , {name : "SIGN IN"}).click()
+test('should successfully login @regression' , async ({page}) => {
+    await Login(page,username,password)
     const welcomeLocator = page.locator("#welcome-message")
     await expect(welcomeLocator).toContainText("Welcome!")
-    await expect(welcomeLocator).toContainText(Config.DEFAULT_USER.username)
+    await expect(welcomeLocator).toContainText(username)
   });
 
 test('should login fail with wrong credentials' , async ({page}) => {
-    await page.locator("#username").fill("wrong")
-    await page.locator("#password").fill("wrong")
-    await page.getByRole("button" , {name : "SIGN IN"}).click()
+    await Login(page,"wrong" , "wrong")
     const wrongCredentialsLocator = page.getByText("Wrong credentials")
     await expect(wrongCredentialsLocator).toBeVisible();
-   
   });
 
   test('should login with blank spaces' , async ({page}) => {
-    await page.locator("#username").fill("")
-    await page.locator("#password").fill("")
-    await page.getByRole("button" , {name : "SIGN IN"}).click()
+    await Login(page,"", "")
     const enterCredentialsLocator = page.getByText("Fields can not be empty")
     await expect(enterCredentialsLocator).toBeVisible();
   });

@@ -49,9 +49,9 @@ To run specific tests by using a tag:
 
 - Add the tag on the title of the test. For instance
 
-on e2e/findCourse.spec.js
+on e2e/login.spec.js
 
-Test: ('Search by genre @regression')
+Test: ('should successfully login @regression')
 
 - Then, run the tests
 
