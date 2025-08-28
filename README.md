@@ -2,7 +2,28 @@
 
 This guide provides an overview of how to run Playwright tests, configure browsers, and execute tests via the command line.
 
-## Running Playwright Tests
+## Running tests locally
+
+in .env file add constant DOCKER=0
+then run the tests with the command
+
+```sh
+npm run test:local
+```
+
+## Running tests on a docker container
+
+in .env file add constant DOCKER=1
+
+then run the tests with the command
+
+```sh
+npm run test:docker
+```
+
+The configuration for the docker container is in the dockerfile
+
+## Running Playwright Tests commands
 
 To run Playwright tests, use the following command:
 

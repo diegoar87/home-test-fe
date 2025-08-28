@@ -3,12 +3,16 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test:local": "npx playwright test",
+    "test:docker": "docker run --rm -it --add-host=host.docker.internal:host-gateway -v $(pwd):/home/pwuser/app -w /home/pwuser/app --user pwuser mcr.microsoft.com/playwright:v1.55.0-noble npx playwright test"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@playwright/test": "^1.55.0",
-    "@types/node": "^24.3.0"
+    "@types/node": "^24.3.0",
+    "dotenv": "^17.2.1"
   }
 }
