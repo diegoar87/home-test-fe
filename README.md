@@ -2,54 +2,89 @@
 
 This guide provides an overview of how to run Playwright tests, configure browsers, and execute tests via the command line.
 
-## Running tests locally
+---
 
-in .env file add constant DOCKER=0
-then run the tests with the command
+## Configuring Docker Mode
 
-```sh
-npm run test:local
+In the root directory, open `config.js` and set the value of `DOCKER` in the `Config` object:
+
+```js
+const Config = {
+  DOCKER: 0 // set to 1 if you want to run tests in Docker
+};
 ```
 
-## Running tests on a docker container
+* `DOCKER: 0` → run tests locally
+* `DOCKER: 1` → run tests inside a Docker container
 
-in .env file add constant DOCKER=1
+This setting controls the `baseURL` used in the tests.
 
-then run the tests with the command
+---
 
-```sh
-npm run test:docker
+## NPM Scripts
+
+The `package.json` includes convenient scripts to run tests locally or in Docker:
+
+```json
+"scripts": {
+  "test:e2e-local": "npx playwright test",
+  "test:api-local": "npx playwright test --project=api",
+  "test:e2e-docker": "docker run --rm -it --add-host=host.docker.internal:host-gateway -v $(pwd):/home/pwuser/app -w /home/pwuser/app --user pwuser mcr.microsoft.com/playwright:v1.55.0-noble npx playwright test",
+  "test:api-docker": "docker run --rm -it --add-host=host.docker.internal:host-gateway -v $(pwd):/home/pwuser/app -w /home/pwuser/app --user pwuser mcr.microsoft.com/playwright:v1.55.0-noble npx playwright test --project=api"
+}
 ```
 
-The configuration for the docker container is in the dockerfile
+* **Local E2E tests:**
 
-## Running Playwright Tests commands
+  ```sh
+  npm run test:e2e-local
+  ```
+* **Local API tests:**
 
-To run Playwright tests, use the following command:
+  ```sh
+  npm run test:api-local
+  ```
+* **Docker E2E tests:**
+
+  ```sh
+  npm run test:e2e-docker
+  ```
+* **Docker API tests:**
+
+  ```sh
+  npm run test:api-docker
+  ```
+
+---
+
+## Running Playwright Tests Commands
+
+To run Playwright tests manually, use:
 
 ```sh
 npx playwright test
 ```
 
-This will execute all tests found in the `tests/` directory by default.
+This executes all tests in the `tests/` directory by default.
+
+---
 
 ### Running in Headless or Headed Mode
 
-By default, Playwright runs tests in headless mode. To run tests in headed mode, use:
+* Headed mode (shows browser UI):
 
-```sh
-npx playwright test --headed
-```
+  ```sh
+  npx playwright test --headed
+  ```
+* Headless mode (default):
 
-Alternatively, to explicitly specify headless mode, use:
+  ```sh
+  npx playwright test --headless
+  ```
 
-```sh
-npx playwright test --headless
-```
+---
 
 ### Selecting a Specific Browser
-
-Playwright supports multiple browsers, including Chromium, Firefox, and WebKit. You can specify which browser to use with:
 
 ```sh
 npx playwright test --browser=chromium
@@ -57,83 +92,94 @@ npx playwright test --browser=firefox
 npx playwright test --browser=webkit
 ```
 
-### Running a Single Test File
+---
 
-To run a specific test file, use:
+### Running a Single Test File
 
 ```sh
 npx playwright test path/to/test.spec.ts
 ```
 
-### Running tests by tags
-To run specific tests by using a tag:
+---
 
-- Add the tag on the title of the test. For instance
+### Running Tests by Tags
 
-on e2e/login.spec.js
+* Add a tag to the test title:
 
-Test: ('should successfully login @regression')
+```ts
+test('should successfully login @regression', async () => { ... });
+```
 
-- Then, run the tests
+* Run tests matching the tag:
 
 ```sh
 npx playwright test --grep @regression
 ```
 
+---
+
 ### Running Tests with Different Configurations
 
-Playwright allows configuration via the `playwright.config.ts` file. You can specify different projects and run them with:
+Playwright uses `playwright.config.ts` to define projects:
 
 ```sh
 npx playwright test --config=playwright.config.ts
+npx playwright test --project=api
 ```
 
-To execute tests for a specific project defined in the configuration:
-
-```sh
-npx playwright test --project=chromium
-```
+---
 
 ### Running Tests in Parallel or Serially
 
-By default, Playwright runs tests in parallel. To run tests serially, use:
+* Parallel (default): runs multiple tests at once
+* Serial:
 
-```sh
-npx playwright test --workers=1
-```
+  ```sh
+  npx playwright test --workers=1
+  ```
+
+---
 
 ### Debugging and Tracing
 
-For debugging, use the following commands:
-
-- Run tests in debug mode:
+* Debug mode:
 
   ```sh
   npx playwright test --debug
   ```
-
-- Capture trace files for debugging:
+* Capture traces:
 
   ```sh
   npx playwright test --trace=on
   ```
-
-- View recorded traces:
+* View trace files:
 
   ```sh
   npx playwright show-trace trace.zip
   ```
 
-### Running Tests with the Playwright UI
+---
 
-Playwright provides a UI mode for better test visualization and debugging. To launch the UI, use:
+### Playwright UI
+
+Interactive UI for exploring test results:
 
 ```sh
 npx playwright test --ui
 ```
 
-This opens an interactive UI where you can explore test results, re-run specific tests, and analyze failures.
+---
+
+## Best Practices
+
+1. Use `Config.DOCKER` to switch between local and Docker environments.
+2. For API tests, consider using dynamic IDs instead of fixed ones to avoid conflicts.
+3. Use `--workers=1` for tests that depend on sequential execution.
+4. Include headers like `Accept: application/json` when calling your API endpoints.
+5. If your API does not support deletion, rely on unique IDs for each test run.
+
+---
 
 ## Conclusion
 
-This guide outlines how to execute Playwright tests efficiently. Adjust browser settings, execution modes, and debugging options to fit your needs.
+Set the `DOCKER` value in `config.js` according to your environment, then use the corresponding npm scripts to run tests locally or in Docker. Adjust browsers, execution modes, and debugging options as needed for your workflow.

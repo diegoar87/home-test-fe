@@ -4,8 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test:local": "npx playwright test",
-    "test:docker": "docker run --rm -it --add-host=host.docker.internal:host-gateway -v $(pwd):/home/pwuser/app -w /home/pwuser/app --user pwuser mcr.microsoft.com/playwright:v1.55.0-noble npx playwright test"
+    "test:e2e-local": "npx playwright test",
+    "test:api-local": "npx playwright test --project=api",
+    "test:e2e-docker": "docker run --rm -it --add-host=host.docker.internal:host-gateway -v $(pwd):/home/pwuser/app -w /home/pwuser/app --user pwuser mcr.microsoft.com/playwright:v1.55.0-noble npx playwright test",
+    "test:api-docker": "docker run --rm -it --add-host=host.docker.internal:host-gateway -v $(pwd):/home/pwuser/app -w /home/pwuser/app --user pwuser mcr.microsoft.com/playwright:v1.55.0-noble npx playwright test --project=api"
+
   },
   "keywords": [],
   "author": "",
