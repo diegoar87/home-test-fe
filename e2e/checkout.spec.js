@@ -48,12 +48,14 @@ test('should Checkout Form Alert' , async ({page}) => {
     await checkboxLocator.uncheck(); // Uncheck same address checkbox
     }
 
+   const dialogPromise = page.waitForEvent('dialog')
    await page.getByText(checkoutBtnLbl).click()
-   
-   page.on('dialog' , async dialog => {
-    expect(dialog.message()).toBe("Shipping address same as billing checkbox must be selected.")
-    dialog.accept()
-   })
+
+   const dialog = await dialogPromise
+
+   expect(dialog.message()).toBe("Shipping address same as billing checkbox must be selected.")
+   await dialog.accept()
+  
 
    // Instead of assert the popup is not showing, I assert the checkout button is enabled. That means the popup is not showing anymore
    await expect(page.getByText(checkoutBtnLbl)).toBeEnabled()

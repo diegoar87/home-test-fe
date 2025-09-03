@@ -7,5 +7,4 @@
   - However, it is possible to apply **global setup and teardown** for other purposes, such as performing login via API or creating and cleaning up test data.  
 - I chose not to apply the Page Object pattern in this project. Since JavaScript is not an OOP-focused language, I find functions more natural and maintainable.
   However, Page Objects can be used with Playwright, and I have successfully applied this pattern in other languages like C#.
-- Currently, two tests for mobile devices are failing. They expect an alert to be displayed, but this alert does not appear on mobile, so the tests need to be adjusted.
 - I am still working in some UI tests at this moment, I hope to complete them soon
