@@ -67,14 +67,17 @@ test('should Checkout Form Alert' , async ({page}) => {
 
 test('should Cart total be equal to sum of all items' , async ({page}) => {
 
+  // Get all paragraphs inside the container
   const allParagraphs =  page.locator('.row .container p')
   const count = await allParagraphs.count()
 
+  // Last p contains the total , index of count - 1
   const totalText = await allParagraphs.nth(count - 1).locator('span').innerText();
   const total =  parsePrice(totalText)
   
   let sum = 0
  
+  // sum all item prices excluding to sum again the total ( i < count - 1 )
   for (let i = 0 ; i < count - 1 ; i++){
 
     const itemText = await allParagraphs.nth(i).locator('span').innerText()
