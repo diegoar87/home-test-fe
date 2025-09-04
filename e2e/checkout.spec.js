@@ -1,4 +1,6 @@
 import { test, expect } from '@playwright/test';
+import { parsePrice } from './utils/utils';
+
 
 const personData = {
     name: "Diego Rojas",
@@ -53,16 +55,37 @@ test('should Checkout Form Alert' , async ({page}) => {
 
    const dialog = await dialogPromise
 
-   expect(dialog.message()).toBe("Shipping address same as billing checkbox must be selected.")
+   expect(dialog.message()).toBe(alertMessage)
    await dialog.accept()
   
 
    // Instead of assert the popup is not showing, I assert the checkout button is enabled. That means the popup is not showing anymore
    await expect(page.getByText(checkoutBtnLbl)).toBeEnabled()
    
-  
-    
+      
 });
+
+test('should Cart total be equal to sum of all items' , async ({page}) => {
+
+  const allParagraphs =  page.locator('.row .container p')
+  const count = await allParagraphs.count()
+
+  const totalText = await allParagraphs.nth(count - 1).locator('span').innerText();
+  const total =  parsePrice(totalText)
+  
+  let sum = 0
+ 
+  for (let i = 0 ; i < count - 1 ; i++){
+
+    const itemText = await allParagraphs.nth(i).locator('span').innerText()
+    
+    sum +=  parsePrice(itemText)
+  }
+   await expect(sum).toBe(total)
+
+});
+
+
 
 });
 
