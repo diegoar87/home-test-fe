@@ -7,5 +7,6 @@
   - However, it is possible to apply **global setup and teardown** for other purposes, such as performing login via API or creating and cleaning up test data.  
 - I chose not to apply the Page Object pattern in this project. Since JavaScript is not an OOP-focused language, I find functions more natural and maintainable.
   However, Page Objects can be used with Playwright, and I have successfully applied this pattern in other languages like C#.
-- I am still working in some UI tests at this moment, I hope to complete them soon
+- UI tests are completed. TODO : Implement a next version using Page Objects
+- TODO: Bypass login for all specs except login.spec.js using storageState or API request
 - The API tests are written in JavaScript with Playwright. I also have experience developing API tests in Java, although it is a stack I haven’t worked with in some time and would just need a short refresh
